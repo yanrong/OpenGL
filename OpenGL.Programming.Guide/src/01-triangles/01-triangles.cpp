@@ -34,7 +34,7 @@ void init (void)
     GLuint program = loadShader(shaders);
     glUseProgram(program);
 
-    glVertexAttribPointer(VPosition, 2, GL_Float, GL_FALSE, 0, BUFFER_OFFSET(0));
+    glVertexAttribPointer(VPosition, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
     glEnableVertexAttribArray(VPosition);
 }
 
@@ -44,14 +44,14 @@ void display(void)
 
     glClearBufferfv(GL_COLOR, 0, black);
 
-    glBindVertexArray(VAOS[Triangles]);
+    glBindVertexArray(VAOs[Triangles]);
     glDrawArrays(GL_TRIANGLES, 0, NumVertices);
 }
 
-int main(int argc, char *argv)
+int main(int argc, char *argvp[])
 {
     if (!glfwInit()) {
-        std::err << "GLFW init error" << std::endl;
+        std::cerr << "GLFW init error" << std::endl;
         return -1;
     }
 
@@ -62,24 +62,24 @@ int main(int argc, char *argv)
 
     GLFWwindow* window = glfwCreateWindow(800, 600, "Triangles", NULL, NULL);
     if (!window) {
-        std::err << "GLFW create window error" << std::endl;
+        std::cerr << "GLFW create window error" << std::endl;
         glfwTerminate();
         return -1;
     }
     //the original textbook demo use gl3w load function pointer.
     //now we chose GLEW instead
-    glewExperimental;
-    if (glewInit() != GLEW_OK) {
-        std::err << "GLEW initialzation error" << std::endl;
+    glewExperimental = GL_TRUE;
+    if (glewInit() !=  GLEW_OK) {
+        std::cerr << "GLEW initialzation error" << std::endl;
         return -1;
     }
     //call init function, user defined
     init();
 
     while (!glfwWindowShouldClose(window)) {
-        display;
+        display();
 
-        glfwSwapBuffers();
+        glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
