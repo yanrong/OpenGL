@@ -11,14 +11,14 @@ static const GLchar* readShader(const char *filename)
     FILE* infile = fopen(filename, "rb");
     if (!infile) {
 #ifdef _DEBUG
-        std::err << "Unable to openg file '" <<  filename << "'" << std::endl;
+        std::cerr << "Unable to openg file '" <<  filename << "'" << std::endl;
 #endif
         return NULL;
     }
 
     fseek(infile, 0 , SEEK_END);
     int len = ftell(infile);
-    fseek(infile, 0 ,SEEK_SET)
+    fseek(infile, 0 ,SEEK_SET);
 
     GLchar* source = new GLchar[len + 1];
     fread(source, 1, len, infile);
@@ -66,7 +66,7 @@ GLuint loadShader(ShaderInfo* shaders)
             glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &len);
             GLchar* log = new GLchar[len + 1];
             glGetShaderInfoLog(shader, len, &len, log);
-            std::err << "Shader compliation failed" << log << std::endl;
+            std::cerr << "Shader compliation failed" << log << std::endl;
             delete []log;
 #endif
             return 0;
@@ -76,7 +76,7 @@ GLuint loadShader(ShaderInfo* shaders)
     }
 
     glLinkProgram(program);
-    GLinit linked;
+    GLint linked;
     glGetProgramiv(program, GL_LINK_STATUS, &linked);
     if (!linked) {
 #ifdef _DEBUG
@@ -84,7 +84,7 @@ GLuint loadShader(ShaderInfo* shaders)
         glGetProgramiv(program, GL_INFO_LOG_LENGTH, &len);
         GLchar *log = new GLchar[len + 1];
         glGetProgramInfoLog(program, len, &len, log);
-        std::err << "Shader linking failed: " << log << std::endl;
+        std::cerr << "Shader linking failed: " << log << std::endl;
         delete[] log;
 #endif
 
