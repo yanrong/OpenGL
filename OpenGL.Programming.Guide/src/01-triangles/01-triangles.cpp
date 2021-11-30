@@ -1,5 +1,5 @@
-#include "include/vgl.h"
 #include "include/LoadShaders.h"
+#include "include/vgl.h"
 
 enum VAO_ID {Triangles, NumVAOs};
 enum BUFFER_ID {ArrayBuffer, NumBuffers};
@@ -26,8 +26,8 @@ void init (void)
     glBufferStorage(GL_ARRAY_BUFFER, sizeof(vertices), vertices, 0);
 
     ShaderInfo shaders[] = {
-        {GL_VERTEX_SHADER, "media/shaders/triangles/triangles.vert"},
-        {GL_FRAGMENT_SHADER, "media/shaders/triangles/triangles.frag"},
+        {GL_VERTEX_SHADER, "shaders/triangles/triangles.vert"},
+        {GL_FRAGMENT_SHADER, "shaders/triangles/triangles.frag"},
         {GL_NONE, NULL}
     };
 
@@ -48,7 +48,7 @@ void display(void)
     glDrawArrays(GL_TRIANGLES, 0, NumVertices);
 }
 
-int main(int argc, char *argvp[])
+int main(int argc, char *argv[])
 {
     if (!glfwInit()) {
         std::cerr << "GLFW init error" << std::endl;
@@ -66,13 +66,16 @@ int main(int argc, char *argvp[])
         glfwTerminate();
         return -1;
     }
+
+    glfwMakeContextCurrent(window);
     //the original textbook demo use gl3w load function pointer.
     //now we chose GLEW instead
     glewExperimental = GL_TRUE;
-    if (glewInit() !=  GLEW_OK) {
+    if (glewInit() != GLEW_OK) {
         std::cerr << "GLEW initialzation error" << std::endl;
         return -1;
     }
+
     //call init function, user defined
     init();
 

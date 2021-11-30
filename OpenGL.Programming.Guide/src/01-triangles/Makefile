@@ -1,11 +1,11 @@
 PWD := $(shell pwd)
 CC := gcc
 CXX := g++
-TOPDIR = $(PWD)/../..
-INCDIR := $(TOPDIR)/include
+
+TOPDIR := $(PWD)/../..
 LIBDIR := $(TOPDIR)/lib
-CFLAGS := -I$(TOPDIR) -I$(INCDIR)
-CXXFLAGS := -I$(TOPDIR) -I$(INCDIR)
+#CFLAGS := -I$(TOPDIR)/include -I$(TOPDIR)
+CXXFLAGS := -I$(TOPDIR)/include -I$(TOPDIR)
 LDFLAGS := -lGL -lGLEW -lglfw -ldl
 
 LIBCXXSOURCE := $(wildcard $(LIBDIR)/*.cpp)
@@ -21,8 +21,10 @@ all: $(CXXEXE)
 #$(COBJS) : $(LIBCSOURCE)
 #	$(CC) -c -o $@ $< $(LDFLAGS) $(CFLAGS)
 
+all: $(CXXEXE)
+
 $(CXXOBJES) : $(LIBCXXSOURCE)
-	$(CXX) -c -o $@ $< $(LDFLAGS) $(CFLAGS)
+	$(CXX) -c -o $@ $< $(CXXFLAGS)
 
 $(CXXEXE): $(CXXSOURCE) $(CXXOBJES)
 	$(CXX) -o $@ $@.cpp $(CXXOBJES) $(CXXFLAGS) $(LDFLAGS)
