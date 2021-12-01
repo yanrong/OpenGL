@@ -9,6 +9,7 @@
 #include <GL/glew.h>
 #include <GL/gl.h>
 #include <iostream>
+#include <string>
 
 #ifdef __cplusplus
 extern "C" {
@@ -35,7 +36,7 @@ typedef struct ShaderInfo_tag {
 
 GLuint loadShader(ShaderInfo*);
 
-const char* getPath(const char* origin);
+std::string getPath(const char* resource);
 const char* getRelativePath();
 
 #ifdef __cplusplus

@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <unistd.h>
 #include "include/LoadShaders.h"
 
 #ifdef __cplusplus
@@ -8,7 +9,9 @@ extern "C" {
 //----------------------------------------------------------------------------
 static const GLchar* readShader(const char *filename)
 {
-    FILE* infile = fopen(filename, "rb");
+    std::string fullPath = getPath(filename);
+    std::cout << "Full path: " << fullPath.c_str() << std::endl;
+    FILE* infile = fopen(fullPath.c_str(), "rb");
     if (!infile) {
 #ifdef _DEBUG
         std::cerr << "Unable to openg file '" <<  filename << "'" << std::endl;
@@ -97,6 +100,28 @@ GLuint loadShader(ShaderInfo* shaders)
     }
 
     return program;
+}
+
+std::string getPath(const char* resource)
+{
+    const char *currentPath = getRelativePath();
+    if(currentPath != NULL) {
+        std::string cur(currentPath);
+        delete []currentPath;
+        return cur + "/../../" + resource;
+    } else {
+        return NULL;
+    }
+}
+
+const char* getRelativePath()
+{
+    char* currentPath = new char[512];
+    if (getcwd(currentPath, 512) != NULL){
+        return currentPath;
+    }
+    delete []currentPath;
+    return NULL;
 }
 
 #ifdef __cplusplus
