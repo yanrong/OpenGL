@@ -10,7 +10,7 @@ extern "C" {
 static const GLchar* readShader(const char *filename)
 {
     std::string fullPath = getPath(filename);
-    std::cout << "Full path: " << fullPath.c_str() << std::endl;
+    // std::cout << "Full path: " << fullPath.c_str() << std::endl;
     FILE* infile = fopen(fullPath.c_str(), "rb");
     if (!infile) {
 #ifdef _DEBUG
