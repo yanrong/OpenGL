@@ -1,10 +1,11 @@
 #include <iostream>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 
+#include "include/vmath.h"
 #include "include/vapp.h"
 #include "include/vutils.h"
 #include "include/LoadShaders.h"
+
+using namespace vmath;
 
 BEGIN_APP_DECLARATION(drawCommandExample)
     //override function from base class
@@ -91,12 +92,12 @@ void drawCommandExample::display(bool autoRedRaw)
 {
     float t = float(appTime() & 0x1fff) / (float) (0x1fff);
     static float q = 0.0f;
-    static const glm::vec3 x(1.0f, 0.0f, 0.0f);
-    static const glm::vec3 y(0.0f, 1.0f, 0.0f);
-    static const glm::vec3 z(0.0f, 0.0f, 1.0f);
-    static const glm::vec4 black = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
+    static const vmath::vec3 x(1.0f, 0.0f, 0.0f);
+    static const vmath::vec3 y(0.0f, 1.0f, 0.0f);
+    static const vmath::vec3 z(0.0f, 0.0f, 1.0f);
+    static const vmath::vec4 black = vmath::vec4(0.0f, 0.0f, 0.0f, 0.0f);
 
-    glm::mat4 modelMatrix;
+    mat4 modelMatrix;
 
     //setup
     glEnable(GL_CULL_FACE);
@@ -106,6 +107,48 @@ void drawCommandExample::display(bool autoRedRaw)
 
     //active shading program
     glUseProgram(renderProgram);
+
     //set upt the model and projection matrix
-    glm::mat4 projectionMatrix =
+    vmath::mat4 projectionMatrix(vmath::frustum(-0.1f, 1.0f, -aspcet, aspcet, 1.0f, 500.0f));
+    glUniformMatrix4x2fv(projectionMatLoc, 1, GL_FALSE, projectionMatrix);
+
+    //set up for glDrawElements
+    glBindVertexArraySGIX(VAO[0]);
+    glBindBuffers(GL_ELEMENT_ARRAY_BUFFER, VBO[0]);
+
+    //draw arrays
+    modelMatrix = vmath::translate(-3.0f, 0.0f, -5.0f);
+    glUniformMatrix4fv(modelMatLoc, 1, GL_FALSE, modelMatrix);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+
+    // draw elements
+    modelMatrix = vmath::translate(-1.0f, 0.0f, -5.0f);
+    glUniformMatrix4fv(modelMatLoc, 1, GL_FALSE, modelMatrix);
+    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, NULL);
+
+    //draw elements base vertex
+    modelMatrix = vmath::translate(1.0f, 0.0f, -5.0f);
+    glUniformMatrix4fv(modelMatLoc, 1, GL_FALSE, modelMatrix);
+    glDrawElementsBaseVertex(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, NULL, 1);
+
+    //draw arrays instanced
+    modelMatrix = vmath::translate(3.0f, 0.0f, -5.0f);
+    glUniformMatrix4fv(modelMatLoc, 1, GL_FALSE, modelMatrix);
+    glDrawArraysInstanced(GL_TRIANGLES, 0, 3, 1);
+
+    base::display();
+}
+
+void drawCommandExample::finalize(void)
+{
+    glUseProgram(0);
+    glDeleteProgram(renderProgram);
+    glDeleteVertexArrays(1, VAO);
+    glDeleteBuffers(1, VBO)
+}
+
+void drawCommandExample::resize(int width, int height)
+{
+    glViewport(0, 0, width, height);
+    aspcet = float(height) / float(width);
 }
