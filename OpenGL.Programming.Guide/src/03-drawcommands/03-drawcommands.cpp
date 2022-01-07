@@ -1,9 +1,8 @@
 #include <iostream>
 
-#include "include/vmath.h"
-#include "include/vapp.h"
-#include "include/vutils.h"
 #include "include/LoadShaders.h"
+#include "include/vapp.h"
+#include "include/vmath.h"
 
 using namespace vmath;
 
@@ -15,7 +14,7 @@ BEGIN_APP_DECLARATION(drawCommandExample)
     virtual void resize(int width, int height);
 
     //Memebe variables
-    float aspcet;
+    float aspect;
     GLuint renderProgram;
     GLuint VAO[1];
     GLuint VBO[1];
@@ -32,8 +31,8 @@ void drawCommandExample::initialize(const char* title)
     base::initialize(title);
 
     ShaderInfo shaders[] = {
-        {GL_VERTEX_SHADER, "shaders/drawCommands/drawCommands.vert"},
-        {GL_FRAGMENT_SHADER, "shaders/drawCommands/drawCommands.frag"},
+        {GL_VERTEX_SHADER, "shaders/primitiveRestart/primitiveRestart.vs.glsl"},
+        {GL_FRAGMENT_SHADER, "shaders/primitiveRestart/primitiveRestart.fs.glsl"},
         {GL_NONE, NULL}
     };
 
@@ -41,8 +40,8 @@ void drawCommandExample::initialize(const char* title)
     glUseProgram(renderProgram);
 
     //model matrix is actually an array of 4 matrices
-    modelMatLoc = glGetUniformLocation(renderProgram, "model_matrix");
-    projectionMatLoc = glGetUniformLocation(renderProgram, "projection_matrix");
+    modelMatLoc = glGetUniformLocation(renderProgram, "modelMatrix");
+    projectionMatLoc = glGetUniformLocation(renderProgram, "projectionMatrix");
 
     //A single triangle
     static const GLfloat vertexPositions[] = {
@@ -61,12 +60,12 @@ void drawCommandExample::initialize(const char* title)
     };
 
     //indices for the triangle strips
-    static const GLfloat vertexIndices[] = {
+    static const GLushort vertexIndices[] = {
         0, 1, 2
     };
 
     // setup the element array buffer
-    glGenBuffer(1, EBO);
+    glGenBuffers(1, EBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO[0]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vertexIndices), vertexIndices, GL_STATIC_DRAW);
 
@@ -74,8 +73,8 @@ void drawCommandExample::initialize(const char* title)
     glGenVertexArrays(1, VAO);
     glBindVertexArray(VAO[0]);
 
-    glGenBuffer(1, VBO);
-    glBindBUffer(GL_ARRAY_BUFFER, VBO[0]);
+    glGenBuffers(1, VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
     // at first allocat the buffer memory, the buffer data is consist of two part, we will fill them respectively
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertexPositions) + sizeof(vertexColors), NULL, GL_STATIC_DRAW);
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertexPositions), vertexPositions); //part 1
@@ -109,12 +108,12 @@ void drawCommandExample::display(bool autoRedRaw)
     glUseProgram(renderProgram);
 
     //set upt the model and projection matrix
-    vmath::mat4 projectionMatrix(vmath::frustum(-0.1f, 1.0f, -aspcet, aspcet, 1.0f, 500.0f));
-    glUniformMatrix4x2fv(projectionMatLoc, 1, GL_FALSE, projectionMatrix);
+    vmath::mat4 projectionMatrix(vmath::frustum(-0.1f, 1.0f, -aspect, aspect, 1.0f, 500.0f));
+    glUniformMatrix4fv(projectionMatLoc, 1, GL_FALSE, projectionMatrix);
 
     //set up for glDrawElements
-    glBindVertexArraySGIX(VAO[0]);
-    glBindBuffers(GL_ELEMENT_ARRAY_BUFFER, VBO[0]);
+    glBindVertexArray(VAO[0]);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VBO[0]);
 
     //draw arrays
     modelMatrix = vmath::translate(-3.0f, 0.0f, -5.0f);
@@ -144,11 +143,11 @@ void drawCommandExample::finalize(void)
     glUseProgram(0);
     glDeleteProgram(renderProgram);
     glDeleteVertexArrays(1, VAO);
-    glDeleteBuffers(1, VBO)
+    glDeleteBuffers(1, VBO);
 }
 
 void drawCommandExample::resize(int width, int height)
 {
     glViewport(0, 0, width, height);
-    aspcet = float(height) / float(width);
+    aspect = float(height) / float(width);
 }

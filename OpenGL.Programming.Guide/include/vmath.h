@@ -154,7 +154,7 @@ namespace vmath
         inline vecN operator*(const vecN& that) const
         {
             my_type result;
-            for (int in = 0; n < len; n++) {
+            for (int n = 0; n < len; n++) {
                 result.data[n] = data[n] * that.data[n];
             }
             return result;
@@ -199,7 +199,7 @@ namespace vmath
         {
             my_type result;
             for (int n = 0; n < len; n++) {
-                result.data[n] = data[n] / that.;
+                result.data[n] = data[n] / that.data[n];
             }
             return result;
         }
@@ -549,7 +549,7 @@ namespace vmath
                 w1 * y2 + y1 * w2 + z1 * x2 - x1 * z2,
                 w1 * z2 + z1 * w2 + x1 * y2 - y1 * x2,
                 w1 * w2 - x1 * x2 - y1 * y2 - z1 * z2
-            )
+            );
         }
 
         inline Tquaternion operator/(const T s) const
