@@ -199,7 +199,7 @@ namespace vmath
         {
             my_type result;
             for (int n = 0; n < len; n++) {
-                result.data[n] = data[n] / that.data[n];
+                result.data[n] = data[n] / that;
             }
             return result;
         }
