@@ -8,7 +8,7 @@ LIBDIR := $(TOPDIR)/lib
 CXXFLAGS := -I$(TOPDIR)/include -I$(TOPDIR)
 LDFLAGS := -lGL -lGLEW -lglfw -ldl
 
-LIBCXXSOURCE := $(wildcard $(LIBDIR)/*.cpp)
+LIBCXXSOURCE := $(LIBDIR)/LoadShaders.cpp $(LIBDIR)/vbm.cpp
 CXXSOURCE := $(wildcard *.cpp)
 CXXEXE := $(CXXSOURCE:.cpp=)
 CXXOBJES := $(LIBCXXSOURCE:.cpp=.o)
@@ -23,11 +23,11 @@ all: $(CXXEXE)
 
 all: $(CXXEXE)
 
-$(CXXOBJES) : $(LIBCXXSOURCE)
-	$(CXX) -c -o $@ $< $(CXXFLAGS)
+#$(CXXOBJES) : $(LIBCXXSOURCE)
+#	$(CXX) -c -o $@ $< $(CXXFLAGS)
 
-$(CXXEXE): $(CXXSOURCE) $(CXXOBJES)
-	$(CXX) -o $@ $@.cpp $(CXXOBJES) $(CXXFLAGS) $(LDFLAGS)
+$(CXXEXE): $(CXXSOURCE) $(LIBCXXSOURCE)
+	$(CXX) -o $@ $<  $(LIBCXXSOURCE) $(CXXFLAGS) $(LDFLAGS)
 
 .PHONY: clean
 

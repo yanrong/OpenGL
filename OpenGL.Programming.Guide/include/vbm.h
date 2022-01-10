@@ -81,13 +81,13 @@ typedef struct VBM_VEC3F_t
     float x;
     float y;
     float z;
-}VBM_VEC3F;
+} VBM_VEC3F;
 
 typedef struct VBM_VEC2F_t
 {
     float x;
     float y;
-}VBM_VEC2F;
+} VBM_VEC2F;
 
 typedef struct VBM_MATERIAL_t
 {
@@ -117,6 +117,7 @@ public:
     bool loadFromVBM(const char *filename, int vertexIndex, int normalIndex, int texCoord0Index);
     void render(unsigned int frameIndex = 0, unsigned int instances = 0);
     bool free(void);
+    void bindVertexArray(void);
 
     unsigned int getVertexCount(unsigned int frame = 0)
     {
@@ -128,7 +129,7 @@ public:
         return mHeader.numAttribs;
     }
 
-    const char* getAttributename(unsigned int index) const
+    const char* getAttributeName(unsigned int index) const
     {
         return index < mHeader.numAttribs ? mAttrib[index].name : NULL;
     }
@@ -187,12 +188,6 @@ public:
     {
         mMaterialTextures[index].normal = texName;
     }
-
-    void bindVertexArray()
-    {
-        glBindVertexArray(mVAO);
-    }
-    
 
 protected:
     GLuint mVAO;

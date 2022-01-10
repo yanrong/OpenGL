@@ -1,16 +1,15 @@
 #include <iostream>
-
-#include "include/LoadShaders.h"
 #include "include/vapp.h"
-#include "include/vmath.h"
-#include "include/vutils.h"
+#include "include/LoadShaders.h"
 #include "include/vbm.h"
+#include "include/vutils.h"
+//#include "include/vmath.h"
 
 BEGIN_APP_DECLARATION(instancingExample)
     //override function from base class
     virtual void initialize(const char* title);
     virtual void display(bool autoRedRaw);
-    virtual void finialize(void);
+    virtual void finalize(void);
     virtual void resize(int width, int height);
 
     //memeber variables
@@ -30,8 +29,8 @@ BEGIN_APP_DECLARATION(instancingExample)
     GLuint geometryXfb;
     GLuint particleXfb;
 
-    GLuint modelMatLoc;
-    GLuint projectionMatLoc;
+    GLint modelMatLoc;
+    GLint projectionMatLoc;
     GLint triangleCountLoc;
     GLint timeStepLoc;
 
@@ -131,7 +130,7 @@ void instancingExample::initialize(const char* title)
     renderProjectionMatLoc = glGetUniformLocation(renderProg, "projectionMatrix");
 
     // load the object
-    object.loadFromVBM("media/armadillo_low.vbm", 0, 1, 2);
+    object.loadFromVBM("./../../media/armadillo_low.vbm", 0, 1, 2);
     // bind its vertex array object so that we can append the instanced attributes
     object.bindVertexArray();
 
@@ -238,7 +237,7 @@ void instancingExample::display(bool autoRedRaw)
     base::display();
 }
 
-void instancingExample::finialize(void)
+void instancingExample::finalize(void)
 {
     glUseProgram(0);
     glDeleteProgram(updateProg);

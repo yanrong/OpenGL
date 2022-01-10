@@ -8,7 +8,7 @@ LIBDIR := $(TOPDIR)/lib
 CXXFLAGS := -I$(TOPDIR)/include -I$(TOPDIR)
 LDFLAGS := -lGL -lGLEW -lglfw -ldl
 
-LIBCXXSOURCE := $(wildcard $(LIBDIR)/*.cpp)
+LIBCXXSOURCE := $(LIBDIR)/LoadShaders.cpp
 CXXSOURCE := $(wildcard *.cpp)
 CXXEXE := $(CXXSOURCE:.cpp=)
 CXXOBJES := $(LIBCXXSOURCE:.cpp=.o)

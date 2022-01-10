@@ -2,9 +2,8 @@
 
 #include <cstring>
 #include <cstdio>
-
-#include "include/vbm.h"
 #include "include/vgl.h"
+#include "include/vbm.h"
 
 VBObject::VBObject(void) : mVAO(0), mAttributeBuffer(0),
     mIndexBuffer(0), mAttrib(0),
@@ -15,13 +14,14 @@ VBObject::VBObject(void) : mVAO(0), mAttributeBuffer(0),
 
 VBObject::~VBObject(void)
 {
-    free();
+    this->free();
 }
 
 bool VBObject::loadFromVBM(const char* filename, int vertexIndex, int normalIndex, int texCoord0Index)
 {
     FILE* fp = NULL;
-    if ((fp = fopen(filename, "rb")) = NULL)
+    fprintf(stderr, "%s load from VBM %s\n", __FUNCTION__, filename);
+    if ((fp = fopen(filename, "rb")) == NULL)
     {
         fprintf(stderr, "%s cant load from VBM %s\n", __FUNCTION__, filename);
         return false;
@@ -34,7 +34,7 @@ bool VBObject::loadFromVBM(const char* filename, int vertexIndex, int normalInde
 
     unsigned char* data = new unsigned char[fileSize];
     unsigned char* rawData;
-    fread(fp, fileSize, 1, fp);
+    fread(data, fileSize, 1, fp);
     fclose(fp);
 
     VBM_HEADER_OLD* oldHeader = (VBM_HEADER_OLD*)data;
@@ -44,8 +44,7 @@ bool VBObject::loadFromVBM(const char* filename, int vertexIndex, int normalInde
     VBM_ATTRIB_HEADER* attribHeader = (VBM_ATTRIB_HEADER *)(data + header->size);
     VBM_FRAME_HEADER* frameHeader = (VBM_FRAME_HEADER*)(data + header->size + header->numAttribs * sizeof(VBM_ATTRIB_HEADER));
     unsigned int totalDataSize = 0;
-
-    if (header->magic = 0x314d4253) {
+    if (header->magic == 0x314d4253) {
         memset(&mHeader, 0, sizeof(mHeader));
         memcpy(&mHeader, header, header->size > sizeof(VBM_HEADER) ? sizeof(VBM_HEADER) : header->size);
     } else {
@@ -62,9 +61,9 @@ bool VBObject::loadFromVBM(const char* filename, int vertexIndex, int normalInde
     mFrame = new VBM_FRAME_HEADER[mHeader.numFrames];
     memcpy(mFrame, frameHeader, mHeader.numFrames * sizeof(VBM_FRAME_HEADER));
 
-    glGenVertexArrays(1, mVAO);
+    glGenVertexArrays(1, &mVAO);
     glBindVertexArray(mVAO);
-    glGenBuffers(1, mAttributeBuffer);
+    glGenBuffers(1, &mAttributeBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, mAttributeBuffer);
 
     for (int i = 0; i < mHeader.numAttribs; i++) {
@@ -73,18 +72,18 @@ bool VBObject::loadFromVBM(const char* filename, int vertexIndex, int normalInde
     glBufferData(GL_ARRAY_BUFFER, totalDataSize, rawData, GL_STATIC_DRAW);
 
     totalDataSize = 0;
-    for (int i = 0; i < mHeader.numMaterials; i++) {
+    for (int i = 0; i < mHeader.numAttribs; i++) {
         int attribIndex = i;
 
         if (attribIndex == 0) {
             attribIndex = vertexIndex;
-        } else if (attribIndex = 1) {
+        } else if (attribIndex == 1) {
             attribIndex = normalIndex;
         } else if (attribIndex == 2) {
             attribIndex = texCoord0Index;
         }
 
-        glVertexAttribPointer(attribIndex, mAttrib[i].components, mAttrib[i].type, GL_FALSE,0 , (GLvoid *)totalDataSize);
+        glVertexAttribPointer(attribIndex, mAttrib[i].components, mAttrib[i].type, GL_FALSE, 0, (GLvoid *)totalDataSize);
         glEnableVertexAttribArray(attribIndex);
         totalDataSize += mAttrib[i].components * sizeof(GLfloat) * header->numVertices;
     }
@@ -136,6 +135,7 @@ bool VBObject::free(void)
     glDeleteBuffers(1, &mAttributeBuffer);
     mAttributeBuffer = 0;
     glDeleteVertexArrays(1, &mVAO);
+	mVAO = 0;
 
     delete []mAttrib;
     mAttrib = NULL;
@@ -152,6 +152,8 @@ void VBObject::render(unsigned int frameIndex, unsigned int instances)
     if (frameIndex >= mHeader.numFrames) {
         return ;
     }
+
+    glBindVertexArray(mVAO);
 
 #if 0
     if (mHeader.numChunks)
@@ -194,4 +196,9 @@ void VBObject::render(unsigned int frameIndex, unsigned int instances)
     }
 #endif 
 
+}
+
+void VBObject::bindVertexArray(void)
+{
+    glBindVertexArray(mVAO);
 }

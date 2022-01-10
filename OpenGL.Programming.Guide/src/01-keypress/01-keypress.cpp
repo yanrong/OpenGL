@@ -1,6 +1,5 @@
-#include "include/LoadShaders.h"
-#include "include/vgl.h"
 #include "include/vapp.h"
+#include "include/LoadShaders.h"
 
 enum VAO_ID {Triangles, NumVAOs};
 enum BUFFER_ID {ArrayBuffer, NumBuffers};

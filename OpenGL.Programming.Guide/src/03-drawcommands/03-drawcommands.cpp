@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include "include/LoadShaders.h"
 #include "include/vapp.h"
+#include "include/LoadShaders.h"
 #include "include/vmath.h"
 
 using namespace vmath;
