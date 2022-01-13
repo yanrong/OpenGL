@@ -65,7 +65,8 @@ void vermilionApplication::charCallback(GLFWwindow* window, unsigned int codePoi
 
 unsigned int vermilionApplication::appTime()
 {
-    return 0;
+    //return 0;
+    return (unsigned int)(glfwGetTime() * 1000.0);
 }
 
 void vermilionApplication::initialize(const char* title)

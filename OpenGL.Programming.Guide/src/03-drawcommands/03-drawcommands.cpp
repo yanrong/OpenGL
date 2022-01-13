@@ -108,12 +108,12 @@ void drawCommandExample::display(bool autoRedRaw)
     glUseProgram(renderProgram);
 
     //set upt the model and projection matrix
-    vmath::mat4 projectionMatrix(vmath::frustum(-0.1f, 1.0f, -aspect, aspect, 1.0f, 500.0f));
+    vmath::mat4 projectionMatrix(vmath::frustum(-1.0f, 1.0f, -aspect, aspect, 1.0f, 500.0f));
     glUniformMatrix4fv(projectionMatLoc, 1, GL_FALSE, projectionMatrix);
 
     //set up for glDrawElements
     glBindVertexArray(VAO[0]);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VBO[0]);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO[0]);
 
     //draw arrays
     modelMatrix = vmath::translate(-3.0f, 0.0f, -5.0f);
