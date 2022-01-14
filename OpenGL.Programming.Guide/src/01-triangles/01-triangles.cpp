@@ -55,11 +55,6 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    //we are not consider the Mac OS platform, so skip compatibility set
-
     GLFWwindow* window = glfwCreateWindow(800, 600, "Triangles", NULL, NULL);
     if (!window) {
         std::cerr << "GLFW create window error" << std::endl;

@@ -18,16 +18,13 @@ CXXOBJES := $(LIBCXXSOURCE:.cpp=.o)
 
 all: $(CXXEXE)
 
-#$(COBJS) : $(LIBCSOURCE)
-#	$(CC) -c -o $@ $< $(LDFLAGS) $(CFLAGS)
+#define explicit rule compile each cpp file to .o file
+#$(LIBDIR)/%.o: %.cpp
+#	$(CXX) -c -o $@ $< $(CXXFLAGS)
 
-all: $(CXXEXE)
-
-$(CXXOBJES) : $(LIBCXXSOURCE)
-	$(CXX) -c -o $@ $< $(CXXFLAGS)
-
+#we add the .o file to dependency list, make will automatically generate .o by implicit rules
 $(CXXEXE): $(CXXSOURCE) $(CXXOBJES)
-	$(CXX) -o $@ $@.cpp $(CXXOBJES) $(CXXFLAGS) $(LDFLAGS)
+	$(CXX) -o $@ $^ $(CXXFLAGS) $(LDFLAGS)
 
 .PHONY: clean
 
