@@ -6,8 +6,7 @@
 #ifndef __LOAD_SHADERS_H__
 #define __LOAD_SHADERS_H__
 
-#include <iostream>
-#include <string>
+#include <GL/gl.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,10 +32,7 @@ typedef struct ShaderInfo_tag {
 } ShaderInfo;
 
 GLuint loadShader(ShaderInfo*);
-/*
-std::string getPath(const char* resource);
-const char* getRelativePath();
-*/
+
 #ifdef __cplusplus
 }
 #endif // __cplusplus

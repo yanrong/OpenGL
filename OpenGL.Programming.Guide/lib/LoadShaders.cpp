@@ -1,5 +1,6 @@
-#include <cstdio>
+#include <stdio.h>
 #include <unistd.h>
+#include <string>
 #include "include/vgl.h"
 #include "include/LoadShaders.h"
 
@@ -38,7 +39,7 @@ static const GLchar* readShader(const char *filename)
     FILE* infile = fopen(fullPath.c_str(), "rb");
     if (!infile) {
 #ifdef _DEBUG
-        std::cerr << "Unable to openg file '" <<  filename << "'" << std::endl;
+        fprintf(stderr,"Unable to openg file '%s'\n",filename);
 #endif
         return NULL;
     }
@@ -92,7 +93,7 @@ GLuint loadShader(ShaderInfo* shaders)
             glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &len);
             GLchar* log = new GLchar[len + 1];
             glGetShaderInfoLog(shader, len, &len, log);
-            std::cerr << "Shader compliation failed" << log << std::endl;
+            fprintf(stderr,"Shader compliation failed %s\n", log);
             delete []log;
 #endif
             return 0;
@@ -110,7 +111,7 @@ GLuint loadShader(ShaderInfo* shaders)
         glGetProgramiv(program, GL_INFO_LOG_LENGTH, &len);
         GLchar *log = new GLchar[len + 1];
         glGetProgramInfoLog(program, len, &len, log);
-        std::cerr << "Shader linking failed: " << log << std::endl;
+        fprintf(stderr, "Shader linking failed: %s\n", log);
         delete[] log;
 #endif
 
