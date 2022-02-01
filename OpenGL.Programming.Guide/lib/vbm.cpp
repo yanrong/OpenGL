@@ -20,7 +20,9 @@ VBObject::~VBObject(void)
 bool VBObject::loadFromVBM(const char* filename, int vertexIndex, int normalIndex, int texCoord0Index)
 {
     FILE* fp = NULL;
+#ifdef _DEBUG
     fprintf(stderr, "%s load from VBM %s\n", __FUNCTION__, filename);
+#endif
     if ((fp = fopen(filename, "rb")) == NULL)
     {
         fprintf(stderr, "%s cant load from VBM %s\n", __FUNCTION__, filename);
@@ -83,7 +85,7 @@ bool VBObject::loadFromVBM(const char* filename, int vertexIndex, int normalInde
             attribIndex = texCoord0Index;
         }
 
-        glVertexAttribPointer(attribIndex, mAttrib[i].components, mAttrib[i].type, GL_FALSE, 0, (GLvoid *)totalDataSize);
+        glVertexAttribPointer(attribIndex, mAttrib[i].components, mAttrib[i].type, GL_FALSE, 0, (GLvoid *)(intptr_t)totalDataSize);
         glEnableVertexAttribArray(attribIndex);
         totalDataSize += mAttrib[i].components * sizeof(GLfloat) * header->numVertices;
     }

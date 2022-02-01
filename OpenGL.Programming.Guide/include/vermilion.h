@@ -1,6 +1,8 @@
 #ifndef _VERMILION_H_
 #define _VERMILION_H_
 
+#include "vgl.h"
+
 #ifdef __cplusplus
 extern "C"
 {

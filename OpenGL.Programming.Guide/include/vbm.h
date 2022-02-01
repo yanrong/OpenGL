@@ -7,7 +7,7 @@
 //include and so in order to include some os the tokens required by files
 //(GL_UNSIGNED_INT, for example). you will need to defined them youself
 #ifndef VBM_FILE_TYPES_ONLY
-//#include "vgl.h"
+#include "vgl.h"
 #include "vmath.h"
 #endif
 

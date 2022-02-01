@@ -19,7 +19,6 @@ static const char* getRelativePath()
     return NULL;
 }
 
-
 static std::string getPath(const char* resource)
 {
     const char *currentPath = getRelativePath();

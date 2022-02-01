@@ -6,7 +6,6 @@
 
 namespace vmath
 {
-
     template <typename T, const int w, const int h> class matNM;
     template <typename T, const int len> class vecN;
     template <typename T> class Tquaternion;
