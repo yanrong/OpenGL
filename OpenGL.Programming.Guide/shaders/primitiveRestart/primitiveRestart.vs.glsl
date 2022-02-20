@@ -10,8 +10,7 @@ out vec4 fColor;
 
 void main(void)
 {
-    const vec4 pos[3] = vec4[3](vec4(-0.3, -0.3, 0.0, 1.0),
-        vec4(0.3, -0.3, 0.0, 1.0), vec4(-0.3, 0.3, 0.0, 1.0) );
+    const vec4 pos[3] = vec4[3](vec4(-0.3, -0.3, 0.0, 1.0), vec4(0.3, -0.3, 0.0, 1.0), vec4(-0.3, 0.3, 0.0, 1.0));
     fColor = vColor;
     gl_Position = projectionMatrix * (modelMatrix * vPosition);
 }

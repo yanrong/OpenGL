@@ -25,7 +25,7 @@ bool VBObject::loadFromVBM(const char* filename, int vertexIndex, int normalInde
 #endif
     if ((fp = fopen(filename, "rb")) == NULL)
     {
-        fprintf(stderr, "%s cant load from VBM %s\n", __FUNCTION__, filename);
+        fprintf(stderr, "%s can't load from VBM %s\n", __FUNCTION__, filename);
         return false;
     }
     

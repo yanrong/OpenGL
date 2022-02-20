@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <unistd.h>
-#include <string>
 #include "include/vgl.h"
 #include "include/LoadShaders.h"
 
@@ -19,7 +18,7 @@ static const char* getRelativePath()
     return NULL;
 }
 
-static std::string getPath(const char* resource)
+std::string getPath(const char* resource)
 {
     const char *currentPath = getRelativePath();
     if(currentPath != NULL) {
