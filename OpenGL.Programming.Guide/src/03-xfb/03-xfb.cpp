@@ -90,6 +90,7 @@ void transformFeedbackExample::initialize(const char* title)
     renderProg = loadShader(renderShaders);
 
     glTransformFeedbackVaryings(updateProg, 2, varyings, GL_INTERLEAVED_ATTRIBS);
+    glLinkProgram(updateProg);
     glUseProgram(updateProg);
 
     modelMatrixLoc = glGetUniformLocation(updateProg, "modelMatrix");
@@ -98,6 +99,7 @@ void transformFeedbackExample::initialize(const char* title)
     timeStepLoc = glGetUniformLocation(updateProg, "timeStep");
 
     glTransformFeedbackVaryings(renderProg, 1, varyings2, GL_INTERLEAVED_ATTRIBS);
+    glLinkProgram(renderProg);
     glUseProgram(renderProg);
     renderModelMatrixLoc = glGetUniformLocation(renderProg, "modelMatrix");
     renderProjectionMatrixLoc = glGetUniformLocation(renderProg, "projectionMatrix");
@@ -157,7 +159,7 @@ static inline int min(int a, int b)
 void transformFeedbackExample::display(bool autoRedRaw)
 {
     static int frameCount = 0;
-    float t = float(appTime() & 0x1fff) / float(0x1fff);
+    float t = float(appTime() & 0x1ffff) / float(0x1ffff);
     static float q = 0.0f;
     //we already import the user namespace vmath
     static const vec3 X(1.0f, 0.0f, 0.0f);
